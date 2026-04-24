@@ -1,0 +1,479 @@
+```html
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>政治獻金透明化儀表板 | 守護民主透明度</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Inter:wght@400;600&display=swap');
+        
+        :root {
+            --primary: #0f172a;
+            --accent: #2563eb;
+            --bg-soft: #f8fafc;
+            --border: #e2e8f0;
+        }
+
+        body {
+            font-family: 'Noto Sans TC', 'Inter', sans-serif;
+            background-color: var(--bg-soft);
+            color: #1e293b;
+            scroll-behavior: smooth;
+        }
+
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .hero-section {
+            background-color: var(--primary);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(37, 99, 235, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(30, 58, 138, 0.2) 0px, transparent 50%);
+        }
+
+        .search-container {
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .card-premium {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 1rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .card-premium:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 20px -8px rgba(0, 0, 0, 0.08);
+        }
+
+        .view-content { display: none; }
+        .view-content.active { display: block; animation: slideUp 0.5s ease-out; }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 1rem;
+        }
+
+        /* 自定義捲軸 */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body>
+
+    <!-- 頂部導航 -->
+    <nav class="glass-nav fixed top-0 w-full z-[100]">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex justify-between h-20 items-center">
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="switchView('landing')">
+                    <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center shadow-lg shadow-blue-500/30">
+                        <i data-lucide="bar-chart-2" class="text-white w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-lg font-bold text-slate-900 leading-tight">政治獻金透明化</h1>
+                        <p class="text-[10px] text-slate-500 tracking-widest uppercase">Transparency Dashboard</p>
+                    </div>
+                </div>
+                <div class="hidden md:flex items-center space-x-10">
+                    <a href="#" onclick="switchView('landing')" class="text-sm font-semibold text-slate-600 hover:text-blue-600 transition">首頁導覽</a>
+                    <a href="#" onclick="switchView('results')" class="text-sm font-semibold text-slate-600 hover:text-blue-600 transition">數據庫查詢</a>
+                    <a href="#" class="text-sm font-semibold text-slate-600 hover:text-blue-600 transition">分析專題</a>
+                    <button onclick="switchView('results')" class="bg-slate-900 text-white px-5 py-2.5 rounded-full text-sm font-bold hover:bg-slate-800 transition shadow-md">
+                        開始探索
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 頁面 1: Landing Page -->
+    <main id="view-landing" class="view-content active pt-20">
+        <!-- Hero Narrative -->
+        <section class="hero-section py-32 px-6 overflow-hidden">
+            <div class="max-w-7xl mx-auto flex flex-col items-center text-center relative z-10">
+                <div class="inline-flex items-center space-x-2 bg-blue-500/10 border border-blue-500/20 px-4 py-2 rounded-full mb-8">
+                    <span class="relative flex h-2 w-2">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+                    </span>
+                    <span class="text-blue-400 text-xs font-bold tracking-widest">2024 選舉數據實時解析</span>
+                </div>
+                
+                <h2 class="text-5xl md:text-7xl font-bold text-white mb-8 tracking-tight leading-[1.1]">
+                    讓錢流無所遁形，<br><span class="text-blue-500">讓民主更有份量。</span>
+                </h2>
+                
+                <p class="max-w-3xl text-slate-400 text-lg md:text-xl mb-12 leading-relaxed">
+                    在政治角力的背後，每一筆獻金都代表了一種期待與立場。我們透過結構化數據，為您揭開政治經費的神秘面紗，讓每一張選票的監督力量都能落實。
+                </p>
+
+                <!-- Search Entry (Dropdown UI) -->
+                <div class="w-full max-w-4xl search-container bg-white rounded-2xl p-2 flex flex-col md:flex-row items-stretch md:items-center gap-2">
+                    <div class="flex-1 flex flex-col md:flex-row">
+                        <div class="relative flex-1 group border-b md:border-b-0 md:border-r border-slate-100">
+                            <i data-lucide="map-pin" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400"></i>
+                            <select id="hero-district" class="w-full pl-12 pr-4 py-4 rounded-xl text-slate-700 font-medium focus:outline-none focus:bg-slate-50 transition">
+                                <option value="">所有行政區</option>
+                                <option value="台北市">台北市</option>
+                                <option value="新北市">新北市</option>
+                                <option value="高雄市">高雄市</option>
+                                <option value="新竹市">新竹市</option>
+                            </select>
+                        </div>
+                        <div class="relative flex-1 group">
+                            <i data-lucide="flag" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400"></i>
+                            <select id="hero-party" class="w-full pl-12 pr-4 py-4 rounded-xl text-slate-700 font-medium focus:outline-none focus:bg-slate-50 transition">
+                                <option value="">所有政黨</option>
+                                <option value="民主進步黨">民主進步黨</option>
+                                <option value="中國國民黨">中國國民黨</option>
+                                <option value="台灣民眾黨">台灣民眾黨</option>
+                                <option value="時代力量">時代力量</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button onclick="executeHeroSearch()" class="bg-blue-600 text-white px-10 py-4 rounded-xl font-bold hover:bg-blue-700 transition shadow-lg shadow-blue-600/20 flex items-center justify-center">
+                        <i data-lucide="search" class="w-5 h-5 mr-2"></i> 搜尋
+                    </button>
+                </div>
+
+                <!-- 範例查詢 -->
+                <div class="mt-8 flex flex-wrap justify-center gap-4 text-slate-500 text-sm">
+                    <span>快速連結：</span>
+                    <button onclick="quickSelect('台北市', '中國國民黨')" class="hover:text-white transition underline decoration-blue-500/50 underline-offset-4">台北市・國民黨</button>
+                    <button onclick="quickSelect('高雄市', '民主進步黨')" class="hover:text-white transition underline decoration-blue-500/50 underline-offset-4">高雄市・民進黨</button>
+                    <button onclick="quickSelect('', '', '柯建銘')" class="hover:text-white transition underline decoration-blue-500/50 underline-offset-4">查看 柯建銘 數據</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Editor's Picks -->
+        <section class="max-w-7xl mx-auto py-24 px-6">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+                <div>
+                    <h3 class="text-3xl font-bold text-slate-900 mb-4">編輯精選分析</h3>
+                    <p class="text-slate-500">透過數據維度，深度剖析選戰金權地圖</p>
+                </div>
+                <button class="text-blue-600 font-bold flex items-center hover:gap-2 transition-all">
+                    瀏覽所有報告 <i data-lucide="arrow-right" class="ml-2 w-5 h-5"></i>
+                </button>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="card-premium p-8">
+                    <div class="w-14 h-14 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center mb-6">
+                        <i data-lucide="factory"></i>
+                    </div>
+                    <h4 class="text-xl font-bold mb-3 text-slate-800">企業捐贈高度依賴者</h4>
+                    <p class="text-slate-500 mb-6 text-sm leading-relaxed">我們過濾出營利事業捐贈比例超過 60% 的候選人名單，探討產業背景與選後法案推動的關聯性。</p>
+                    <div class="pt-6 border-t border-slate-100 flex justify-between items-center">
+                        <span class="text-xs font-bold text-slate-400 tracking-tighter uppercase">Topic 01</span>
+                        <a href="#" class="text-blue-600 font-bold text-sm underline underline-offset-4">立即閱讀</a>
+                    </div>
+                </div>
+
+                <div class="card-premium p-8">
+                    <div class="w-14 h-14 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-6">
+                        <i data-lucide="coins"></i>
+                    </div>
+                    <h4 class="text-xl font-bold mb-3 text-slate-800">小額捐款的民主溫度</h4>
+                    <p class="text-slate-500 mb-6 text-sm leading-relaxed">分析個人捐贈筆數最多的候選人，這通常反映了該人選在基層社會中的真實動員力與支持廣度。</p>
+                    <div class="pt-6 border-t border-slate-100 flex justify-between items-center">
+                        <span class="text-xs font-bold text-slate-400 tracking-tighter uppercase">Topic 02</span>
+                        <a href="#" class="text-blue-600 font-bold text-sm underline underline-offset-4">立即閱讀</a>
+                    </div>
+                </div>
+
+                <div class="card-premium p-8">
+                    <div class="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center mb-6">
+                        <i data-lucide="zap"></i>
+                    </div>
+                    <h4 class="text-xl font-bold mb-3 text-slate-800">高 CP 值選戰排行</h4>
+                    <p class="text-slate-500 mb-6 text-sm leading-relaxed">誰能用最少的經費換取最多的選票？我們計算「得票成本」，找出選戰中的最高效率者。</p>
+                    <div class="pt-6 border-t border-slate-100 flex justify-between items-center">
+                        <span class="text-xs font-bold text-slate-400 tracking-tighter uppercase">Topic 03</span>
+                        <a href="#" class="text-blue-600 font-bold text-sm underline underline-offset-4">立即閱讀</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 頁面 2: Results List -->
+    <main id="view-results" class="view-content pt-20 pb-32">
+        <!-- Quick Summary Bar -->
+        <div class="bg-slate-900 text-white py-12 px-6">
+            <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
+                <div>
+                    <h2 class="text-3xl font-bold mb-2">數據庫搜尋</h2>
+                    <p class="text-slate-400 text-sm">當前篩選條件下共有 <span id="summary-count" class="text-white font-bold">--</span> 位候選人符合條件</p>
+                </div>
+                <div class="flex gap-4 md:gap-12">
+                    <div>
+                        <p class="text-slate-400 text-xs mb-1 font-semibold uppercase tracking-wider">平均個人捐贈</p>
+                        <p class="text-xl font-bold text-blue-400" id="summary-ind-avg">--</p>
+                    </div>
+                    <div>
+                        <p class="text-slate-400 text-xs mb-1 font-semibold uppercase tracking-wider">最高收入紀錄</p>
+                        <p class="text-xl font-bold text-blue-400" id="summary-max-income">--</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-6 mt-12">
+            <div class="flex flex-col lg:flex-row gap-8">
+                
+                <!-- 精緻側邊欄過濾 -->
+                <aside class="w-full lg:w-72 flex-shrink-0 space-y-8">
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                        <h4 class="font-bold text-slate-800 mb-6 flex items-center">
+                            <i data-lucide="sliders-horizontal" class="w-4 h-4 mr-2"></i> 精準篩選
+                        </h4>
+                        
+                        <div class="space-y-6">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">關鍵字搜尋</label>
+                                <div class="relative">
+                                    <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"></i>
+                                    <input type="text" id="filter-keyword" oninput="applyFilters()" placeholder="姓名或政黨..." 
+                                        class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500/20 focus:bg-white transition outline-none">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">行政地區</label>
+                                <select id="filter-district" onchange="applyFilters()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500/20 outline-none">
+                                    <option value="">所有地區</option>
+                                    <option value="台北市">台北市</option>
+                                    <option value="新北市">新北市</option>
+                                    <option value="高雄市">高雄市</option>
+                                    <option value="新竹市">新竹市</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">排序基準</label>
+                                <select id="filter-sort" onchange="applyFilters()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500/20 outline-none">
+                                    <option value="income-desc">總收入：高至低</option>
+                                    <option value="votes-desc">得票數：高至低</option>
+                                    <option value="corp-desc">企業捐贈比：高至低</option>
+                                    <option value="ind-desc">個人捐贈比：高至低</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-blue-600 rounded-2xl p-6 text-white shadow-xl shadow-blue-600/20">
+                        <h5 class="font-bold mb-2">需要完整數據？</h5>
+                        <p class="text-blue-100 text-xs mb-4 leading-relaxed">您可以申請下載 2024 年度所有原始政治獻金清單 CSV 檔案，進行深度分析。</p>
+                        <button class="w-full bg-white text-blue-600 py-2.5 rounded-xl text-xs font-bold hover:bg-blue-50 transition">申請匯出</button>
+                    </div>
+                </aside>
+
+                <!-- 結果展示區 -->
+                <div class="flex-1">
+                    <div id="results-container" class="space-y-4">
+                        <!-- JS 動態渲染 -->
+                    </div>
+
+                    <!-- Infinite Scroll Indicator -->
+                    <div id="loading-trigger" class="py-12 flex justify-center">
+                        <button onclick="loadMore()" class="group flex flex-col items-center">
+                            <div class="w-10 h-10 border-2 border-slate-200 border-t-blue-600 rounded-full animate-spin mb-4"></div>
+                            <span class="text-xs font-bold text-slate-400 group-hover:text-slate-600 transition tracking-widest uppercase">載入更多數據</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-white border-t border-slate-200 py-16 px-6">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+            <div class="flex flex-col items-center md:items-start">
+                <div class="flex items-center space-x-2 mb-4">
+                    <div class="w-8 h-8 bg-slate-900 rounded-lg flex items-center justify-center">
+                        <i data-lucide="check" class="text-white w-5 h-5"></i>
+                    </div>
+                    <span class="font-bold text-slate-900">透明監督計畫</span>
+                </div>
+                <p class="text-slate-400 text-xs">© 2024 Political Transparency Dashboard. 非營利公益性質專案。</p>
+            </div>
+            <div class="flex space-x-8 text-sm font-semibold text-slate-500">
+                <a href="#" class="hover:text-blue-600 transition">隱私權政策</a>
+                <a href="#" class="hover:text-blue-600 transition">數據說明</a>
+                <a href="#" class="hover:text-blue-600 transition">GitHub 專案</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 核心模擬數據 (豐富化)
+        const mockData = [
+            { name: "柯建銘", party: "民主進步黨", district: "新竹市", votes: 90642, rate: "41.33%", income: 51641147, corp_rate: 52.12, ind_rate: 41.6, gender: "男" },
+            { name: "邱志偉", party: "民主進步黨", district: "高雄市", votes: 110819, rate: "63.23%", income: 38603507, corp_rate: 55.03, ind_rate: 43.09, gender: "男" },
+            { name: "蔣萬安", party: "中國國民黨", district: "台北市", votes: 89673, rate: "46.68%", income: 45000000, corp_rate: 48.20, ind_rate: 45.1, gender: "男" },
+            { name: "吳思瑤", party: "民主進步黨", district: "台北市", votes: 95951, rate: "50.81%", income: 32000000, corp_rate: 35.50, ind_rate: 58.2, gender: "女" },
+            { name: "賴士葆", party: "中國國民黨", district: "台北市", votes: 83931, rate: "49.69%", income: 28000000, corp_rate: 60.10, ind_rate: 30.5, gender: "男" },
+            { name: "黃捷", party: "民主進步黨", district: "高雄市", votes: 113000, rate: "51.2%", income: 15000000, corp_rate: 12.5, ind_rate: 85.0, gender: "女" },
+            { name: "徐巧芯", party: "中國國民黨", district: "台北市", votes: 89000, rate: "52.4%", income: 18000000, corp_rate: 30.2, ind_rate: 65.8, gender: "女" },
+            { name: "黃國昌", party: "台灣民眾黨", district: "台北市", votes: 0, rate: "不適用", income: 22000000, corp_rate: 20.0, ind_rate: 75.0, gender: "男" },
+            { name: "陳冠廷", party: "民主進步黨", district: "嘉義縣", votes: 73000, rate: "49.5%", income: 25000000, corp_rate: 45.0, ind_rate: 50.0, gender: "男" }
+        ];
+
+        let displayCount = 5;
+        let currentFiltered = [...mockData];
+
+        function init() {
+            lucide.createIcons();
+            applyFilters();
+        }
+
+        function switchView(viewId) {
+            document.querySelectorAll('.view-content').forEach(v => v.classList.remove('active'));
+            document.getElementById(`view-${viewId}`).classList.add('active');
+            window.scrollTo(0,0);
+        }
+
+        function executeHeroSearch() {
+            const district = document.getElementById('hero-district').value;
+            const party = document.getElementById('hero-party').value;
+            
+            document.getElementById('filter-district').value = district;
+            document.getElementById('filter-keyword').value = party; // 簡易邏輯
+            
+            switchView('results');
+            applyFilters();
+        }
+
+        function quickSelect(district, party, keyword = "") {
+            document.getElementById('filter-district').value = district;
+            document.getElementById('filter-keyword').value = keyword || party;
+            switchView('results');
+            applyFilters();
+        }
+
+        function applyFilters() {
+            const keyword = document.getElementById('filter-keyword').value.toLowerCase();
+            const district = document.getElementById('filter-district').value;
+            const sortBy = document.getElementById('filter-sort').value;
+
+            currentFiltered = mockData.filter(d => {
+                const matchKeyword = d.name.includes(keyword) || d.party.includes(keyword);
+                const matchDistrict = district === "" || d.district === district;
+                return matchKeyword && matchDistrict;
+            });
+
+            // 排序
+            if (sortBy === 'income-desc') currentFiltered.sort((a,b) => b.income - a.income);
+            if (sortBy === 'votes-desc') currentFiltered.sort((a,b) => b.votes - a.votes);
+            if (sortBy === 'corp-desc') currentFiltered.sort((a,b) => b.corp_rate - a.corp_rate);
+            if (sortBy === 'ind-desc') currentFiltered.sort((a,b) => b.ind_rate - a.ind_rate);
+
+            displayCount = 5;
+            updateSummary();
+            renderResults();
+        }
+
+        function updateSummary() {
+            const count = currentFiltered.length;
+            const maxIncome = count > 0 ? Math.max(...currentFiltered.map(d => d.income)) : 0;
+            const avgInd = count > 0 ? (currentFiltered.reduce((a, b) => a + b.ind_rate, 0) / count).toFixed(1) : 0;
+
+            document.getElementById('summary-count').innerText = count;
+            document.getElementById('summary-max-income').innerText = `$${(maxIncome/1000000).toFixed(1)}M`;
+            document.getElementById('summary-ind-avg').innerText = `${avgInd}%`;
+        }
+
+        function loadMore() {
+            displayCount += 5;
+            renderResults();
+        }
+
+        function renderResults() {
+            const container = document.getElementById('results-container');
+            const toDisplay = currentFiltered.slice(0, displayCount);
+            
+            if (toDisplay.length === 0) {
+                container.innerHTML = `
+                    <div class="py-32 flex flex-col items-center justify-center bg-white rounded-3xl border border-dashed border-slate-200">
+                        <i data-lucide="search-x" class="w-12 h-12 text-slate-200 mb-4"></i>
+                        <p class="text-slate-400 font-medium">沒有符合篩選條件的數據</p>
+                    </div>
+                `;
+                document.getElementById('loading-trigger').style.display = 'none';
+            } else {
+                container.innerHTML = toDisplay.map(d => `
+                    <div class="card-premium p-6 flex flex-col md:flex-row items-center gap-6">
+                        <div class="flex-shrink-0 relative">
+                            <div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center text-slate-400">
+                                <i data-lucide="user" class="w-8 h-8"></i>
+                            </div>
+                            <div class="absolute -bottom-1 -right-1 w-6 h-6 bg-blue-600 border-4 border-white rounded-full flex items-center justify-center">
+                                <i data-lucide="check" class="text-white w-3 h-3"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="flex-1 text-center md:text-left">
+                            <div class="flex flex-col md:flex-row md:items-center gap-2 mb-1">
+                                <h4 class="text-xl font-bold text-slate-900">${d.name}</h4>
+                                <span class="inline-block px-2.5 py-0.5 bg-slate-100 text-slate-600 text-[10px] font-bold rounded uppercase tracking-wider">${d.party}</span>
+                            </div>
+                            <p class="text-slate-500 text-sm font-medium">
+                                <i data-lucide="map-pin" class="inline w-3 h-3 mr-1"></i> ${d.district} 
+                                <span class="mx-2 text-slate-200">|</span> 
+                                得票率 <span class="text-slate-900 font-bold">${d.rate}</span>
+                            </p>
+                        </div>
+
+                        <div class="grid grid-cols-2 md:flex gap-4 md:gap-12 w-full md:w-auto pt-4 md:pt-0 border-t md:border-t-0 border-slate-100">
+                            <div>
+                                <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1">總收入</p>
+                                <p class="text-lg font-bold text-slate-800">$${(d.income/10000).toLocaleString()} 萬</p>
+                            </div>
+                            <div>
+                                <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1">營利捐贈</p>
+                                <div class="flex items-center gap-2">
+                                    <p class="text-lg font-bold ${d.corp_rate > 50 ? 'text-amber-600' : 'text-slate-800'}">${d.corp_rate}%</p>
+                                    <div class="w-12 h-1.5 bg-slate-100 rounded-full overflow-hidden hidden sm:block">
+                                        <div class="h-full bg-blue-500" style="width: ${d.corp_rate}%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="w-full md:w-auto px-6 py-3 bg-slate-50 hover:bg-slate-900 hover:text-white transition rounded-xl text-xs font-bold border border-slate-100">
+                            詳細數據
+                        </button>
+                    </div>
+                `).join('');
+
+                document.getElementById('loading-trigger').style.display = (displayCount >= currentFiltered.length) ? 'none' : 'flex';
+            }
+            lucide.createIcons();
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>
+
+```
